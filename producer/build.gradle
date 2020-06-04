@@ -1,0 +1,27 @@
+
+plugins {
+    id "java"
+    id "org.springframework.boot" version "2.1.0.RELEASE"
+}
+
+
+def junitVersion = '4.8.2'
+
+
+version = '0.0'
+
+bootJar {
+    baseName = 'producer'
+    version =  '0.0'
+}
+
+
+dependencies {
+    compile project(":shared")
+    compile("org.springframework.boot:spring-boot-starter-web:2.2.7.RELEASE")
+    compile 'org.springframework.integration:spring-integration-core:5.2.6.RELEASE'
+    compile 'org.springframework.integration:spring-integration-ip:5.2.6.RELEASE'
+
+
+    testCompile "junit:junit:$junitVersion"
+}

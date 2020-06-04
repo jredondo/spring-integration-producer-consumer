@@ -1,0 +1,39 @@
+
+plugins {
+    id "java"
+    id "org.springframework.boot" version "2.3.0.RELEASE"
+}
+
+
+def junitVersion = '4.8.2'
+
+
+version = '0.0'
+
+jar {
+    manifest {
+        attributes('Main-Class': 'org.data_monitor.ConsumerApp')
+    }
+}
+
+
+dependencies {
+    compile project(":shared")
+
+    //compile 'org.springframework.integration:spring-integration-core:5.3.0.RELEASE'
+    //compile 'org.springframework.integration:spring-integration-ip:5.3.0.RELEASE'
+    compile("org.springframework.boot:spring-boot-starter-web:2.3.0.RELEASE") //{
+
+    compile group: 'org.springframework.integration', name: 'spring-integration-kafka', version: '3.3.0.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
+    //compile group: 'org.apache.kafka', name: 'kafka-clients', version: '2.5.0'
+    //compile group: 'org.apache.kafka', name: 'kafka_2.13', version: '2.5.0'
+
+
+    //compile('io.springfox:springfox-swagger2:2.8.0')
+    //compile('io.springfox:springfox-swagger-ui:2.8.0')
+
+
+
+}
