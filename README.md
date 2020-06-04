@@ -47,3 +47,6 @@ Email: Jorge Redondo Flames <jorge.redondo -- gmail.com>
 LinkedIn: https://www.linkedin.com/in/jorge-redondo-flames-45589418a/
 ``` 
 
+#### License:
+
+You are free to do whatever you want with whatever you find here. 
