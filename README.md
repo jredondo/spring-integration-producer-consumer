@@ -1,6 +1,6 @@
 # Simple Producer/Consumer implementation using Spring Integration.
 
-This is a still an incipient implementation of the Producer/Consumer pattern using (Spring Integration)[https://docs.spring.io/spring-integration/reference/html/overview.html]. 
+This is a still an incipient implementation of the Producer/Consumer pattern using [Spring Integration](https://docs.spring.io/spring-integration/reference/html/overview.html). 
 Its _main_ purpose is to show the decoupling of producer's and consumer's logic from the integration mechanisms provided out of the box by Spring Integration.
 Two integration mechanism are provided so far: TCP and Kafka.
 
@@ -47,6 +47,3 @@ Email: Jorge Redondo Flames <jorge.redondo -- gmail.com>
 LinkedIn: https://www.linkedin.com/in/jorge-redondo-flames-45589418a/
 ``` 
 
-#### License:
-
-You are free to do whatever you want with whatever you find here. 
