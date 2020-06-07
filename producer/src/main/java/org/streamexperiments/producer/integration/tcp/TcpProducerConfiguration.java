@@ -22,7 +22,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
- * Gathers the integration stuff related to Kafka messaging, conditionally loaded
+ * Gathers the integration stuff related to TCP messaging, conditionally loaded
  * depending on tcp.enabled property.
  * If that property is set to "true" the configuration will be loaded, otherwise it will not.
  * Notice the integration stuff is abstracted behind {@link org.streamexperiments.producer.integration.Gateway} to which
