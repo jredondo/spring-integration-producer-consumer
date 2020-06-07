@@ -6,7 +6,7 @@ Two integration mechanism are provided so far: TCP and Kafka.
 
 #### Docker Swarm:
 
-Some rudimentary scripts and Dockerfiles for deploying with Docker Swarm are provided in the following directories: 
+Some rudimentary scripts and Dockerfiles for deploying with Docker Swarm and Docker Machine are provided in the following directories: 
 
 ```
 $ ls -l docker/
