@@ -43,7 +43,7 @@ public class TcpProducer implements ApplicationListener<TcpConnectionOpenEvent> 
      */
     @Override
     public void onApplicationEvent(TcpConnectionOpenEvent event) {
-        producer.addGateway(new Sender(tcpGateway, event.getConnectionId()));
+        producer.addSender(new Sender(tcpGateway, event.getConnectionId()));
         producer.start();
     }
 }

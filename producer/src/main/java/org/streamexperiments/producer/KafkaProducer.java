@@ -41,7 +41,7 @@ public class KafkaProducer {
     @PostConstruct
     private void init() {
         producer = new TestProducer(throughput, N);
-        producer.addGateway(new Sender(kafkaGateway, properties.getTopic()));
+        producer.addSender(new Sender(kafkaGateway, properties.getTopic()));
         producer.start();
     }
 

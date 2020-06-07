@@ -14,11 +14,11 @@ data-monitor:
   N: 1
 
 tcp:
-  enabled: "false"
+  enabled: "true"
   port: 8091
 
 kafka:
-  enabled: "true"
+  enabled: "false"
   topic: "test.topic"
   group-id: "siTestGroup"
   messageKey: "si.key"

@@ -20,7 +20,7 @@ public class TestProducer {
     private final String senderHashCode;
     private Update update;
     private AtomicLong sequece = new AtomicLong();
-    private Set<Sender> gateways;
+    private Set<Sender> senders;
     private boolean started = false;
 
     /**
@@ -32,15 +32,15 @@ public class TestProducer {
         this.throughput = throughput;
         this.N = N;
         senderHashCode = Integer.toString((int)(Math.random()*Integer.MAX_VALUE));
-        gateways = new HashSet<>();
+        senders = new HashSet<>();
     }
 
     /**
      * Adds a {@link Sender} to be included in the set of senders.
      * @param sender Sender instance
      */
-    public void addGateway(Sender sender) {
-        gateways.add(sender);
+    public void addSender(Sender sender) {
+        senders.add(sender);
     }
 
     /**
@@ -64,7 +64,7 @@ public class TestProducer {
 
                     for(int i = 0; i < N; i++) {
                         update = new Update(sequece.getAndIncrement(), senderHashCode, System.currentTimeMillis());
-                        gateways.forEach((gateway) -> gateway.send(update));
+                        senders.forEach((sender) -> sender.send(update));
                     }
                 }
             } catch (InterruptedException e) {
