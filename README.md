@@ -1,6 +1,6 @@
 # Simple Producer/Consumer implementation using Spring Integration.
 
-This is a still an incipient implementation of the Producer/Consumer pattern using [Spring Integration](https://docs.spring.io/spring-integration/reference/html/overview.html). 
+This is still an incipient implementation of the Producer/Consumer pattern using [Spring Integration](https://docs.spring.io/spring-integration/reference/html/overview.html). 
 Its _main_ purpose is to show the decoupling of producer's and consumer's logic from the integration mechanisms provided out of the box by Spring Integration.
 Two integration mechanism are provided so far: TCP and Kafka.
 
