@@ -14,12 +14,12 @@ data-monitor:
   N: 1
 
 tcp:
-  enabled: "true"
+  enabled: "false"
   port: 8091
 
 kafka:
-  enabled: "false"
-  topic: "test.topic"
+  enabled: "true"
+  topic: "producer.topic"
   group-id: "siTestGroup"
   messageKey: "si.key"
   buffer-memory: 33554432

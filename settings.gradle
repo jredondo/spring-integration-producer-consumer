@@ -1,3 +1,2 @@
-include "producer", "consumer", "shared"
-include 'cep'
+include "producer", "consumer", "shared", "cep"
 

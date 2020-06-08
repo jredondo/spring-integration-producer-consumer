@@ -6,11 +6,11 @@ function startMachine {
     docker-machine ssh $1 sudo update-ca-certificates
 }
 
-CERT= # Your registry's certificate as seen by any of the manager nodes.  
+CERT=/hosthome/jredondo/Projects/data_monitor/docker/certs/domain.crt
 
 startMachine manager1 
-startMachine worker0
-startMachine worker1
+#startMachine worker0
+#startMachine worker1
 
 
 

@@ -1,15 +1,53 @@
 plugins {
-    id 'java'
+    id "application"
 }
 
-version '0.0'
-
-sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
 }
 
+description = "Flink-based CEP"
+
+def junitVersion = '4.8.2'
+
+version = '0.0'
+
+mainClassName = "org.streamexperiments.cep.process.CEP"
+
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile project(":shared")
+    compile 'org.apache.flink:flink-java:1.10.1'
+    compile 'org.apache.flink:flink-streaming-java_2.11:1.10.1'
+    compile group: 'org.apache.flink', name: 'flink-connector-kafka_2.12', version: '1.10.1'
+
+
 }
+/*
+task buildJar(type: Jar) {
+    baseName = 'CEP'
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    with jar
+    
+    manifest {
+        attributes(
+                "Main-Class": "org.streamexperiments.cep.process.CEP",
+        )
+    }
+}
+*/
+
+task buildJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'org.streamexperiments.cep.process.CEP'
+    }
+    baseName = 'CEP'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+

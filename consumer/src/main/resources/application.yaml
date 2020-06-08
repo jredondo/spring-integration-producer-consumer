@@ -9,8 +9,8 @@ spring:
             INDENT_OUTPUT: true
 
 kafka:
-    enabled: "false"
-    topic: "test.topic"
+    enabled: "true"
+    topic: "consumer.topic"
     messageKey: "si.key"
     group-id: "siTestGroup"
     auto-offset-reset: earliest
@@ -19,7 +19,7 @@ kafka:
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 tcp:
-    enabled: "true"
+    enabled: "false"
     mode: "client"
     port: 8091
     host: "localhost"
