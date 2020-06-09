@@ -6,8 +6,6 @@ version: "3.7"
 services:
   jobmanager:
     image: ${REGISTRY_IP}/flink
-    expose:
-      - "6123"
     ports:
       - "8081:8081"
     command: jobmanager
@@ -16,13 +14,6 @@ services:
 
   taskmanager:
     image: ${REGISTRY_IP}/flink
-    expose:
-      - "6121"
-      - "6122"
-    depends_on:
-      - jobmanager
-      - producer
-      - api
     command: taskmanager
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
@@ -62,6 +53,8 @@ services:
     ports:
        - 9093:9093
        - 9092:9092
+    depends_on:
+      - zookeeper
     environment:
        - ALLOW_PLAINTEXT_LISTENER=yes
        - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
