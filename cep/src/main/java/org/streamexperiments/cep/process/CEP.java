@@ -1,7 +1,6 @@
 package org.streamexperiments.cep.process;
 
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.serialization.TypeInformationSerializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
@@ -10,20 +9,16 @@ import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.ObjectMap
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.streaming.connectors.kafka.KafkaSerializationSchema;
 import java.util.*;
 
-import org.apache.flink.types.StringValue;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.streamexperiments.models.Update;
 
-public class
-
-CEP {
+public class CEP {
 
     public static final String KAFKA_TOPIC_PRODUCER = "producer.topic";
     public static final String KAFKA_TOPIC_CONSUMER = "consumer.topic";
