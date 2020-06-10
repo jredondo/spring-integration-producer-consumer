@@ -15,8 +15,9 @@ kafka:
     group-id: "siTestGroup"
     auto-offset-reset: earliest
     enable-auto-commit: false
-    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    #value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    #key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
 
 tcp:
     enabled: "false"
