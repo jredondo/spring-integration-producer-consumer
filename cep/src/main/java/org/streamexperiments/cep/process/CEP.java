@@ -1,7 +1,9 @@
 package org.streamexperiments.cep.process;
 
 import org.apache.flink.api.common.ExecutionConfig;
+import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.serialization.TypeInformationSerializationSchema;
+import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,6 +15,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.streaming.connectors.kafka.KafkaSerializationSchema;
+import org.apache.flink.streaming.connectors.kafka.KafkaDeserializationSchema;
 import org.apache.flink.util.Collector;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -22,7 +25,8 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
 
-
+import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,13 +50,10 @@ public class CEP {
         properties.setProperty("zookeeper.connect", "192.168.99.147:2181");
         properties.setProperty("group.id", "siTestGroup");
 
-        TypeInformation<Update> typeInfo = TypeExtractor.getForClass(Update.class);
-        TypeInformationSerializationSchema<Update> schema =
-                new TypeInformationSerializationSchema<Update>(typeInfo, new ExecutionConfig());
-
+        UpdateDeserializationSchema deserializationSchema = new UpdateDeserializationSchema();
 
         DataStream<Update> incomingStream = env
-                .addSource(new FlinkKafkaConsumer<Update>(KAFKA_TOPIC_PRODUCER, schema, properties))
+                .addSource(new FlinkKafkaConsumer<Update>(KAFKA_TOPIC_PRODUCER, deserializationSchema, properties))
                 .setParallelism(1)
                 .flatMap(
                         new LogFlatMapFunction())
@@ -66,11 +67,11 @@ public class CEP {
                 .apply(new WindowedUpdatesFunction());
 
 
-/*
-        UpdateSerializationSchema kafkaSchema = new UpdateSerializationSchema(KAFKA_TOPIC_CONSUMER);
+
+        UpdateSerializationSchema serializationSchema = new UpdateSerializationSchema(KAFKA_TOPIC_CONSUMER);
 
         FlinkKafkaProducer<Update> kafkaProducer = new FlinkKafkaProducer<>(KAFKA_TOPIC_CONSUMER,
-                kafkaSchema,
+                serializationSchema,
                 properties,
                 FlinkKafkaProducer.Semantic.NONE);
 
@@ -79,7 +80,6 @@ public class CEP {
         DataStreamSink<Update> returnStream = incomingStream.addSink(kafkaProducer);
 
         returnStream.setParallelism(1);
-*/
 
         env.execute("Producer/Flink/Consumer Demonstration");
 
@@ -90,9 +90,12 @@ public class CEP {
         @Override
         public void apply(String key, TimeWindow window, Iterable<Update> updates, Collector<Collection<Update>> out) {
             Set<Update> set = new HashSet<>();
-            
-            for(Update update: updates) 
+
+            for(Update update: updates) {
                 set.add(update);
+            }
+
+            System.out.println("Window processing " + set.size() + " updates.");
         }  
     }
 
@@ -104,10 +107,31 @@ public class CEP {
         }
     }
 
+    public static class UpdateDeserializationSchema implements KafkaDeserializationSchema<Update> {
+        private ObjectMapper mapper = new ObjectMapper();
+
+        @Override
+        public boolean isEndOfStream(Update nextElement) {
+            return false;
+        }
+
+        @Override
+        public Update deserialize(ConsumerRecord<byte[], byte[]> record) throws Exception {
+            return mapper.readValue(record.value(), Update.class);
+        }
+
+
+        @Override
+        public TypeInformation<Update> getProducedType() {
+            return TypeInformation.of(new TypeHint<Update>() {
+            });
+        }
+    }
+
     public static class UpdateSerializationSchema implements KafkaSerializationSchema<Update> {
 
         private String topic;
-        private ObjectMapper mapper;
+        private ObjectMapper mapper = new ObjectMapper();
 
         public UpdateSerializationSchema(String topic) {
             super();
@@ -117,9 +141,7 @@ public class CEP {
         @Override
         public ProducerRecord<byte[], byte[]> serialize(Update update, Long timestamp) {
             byte[] blob = null;
-            if (mapper == null) {
-                mapper = new ObjectMapper();
-            }
+
             try {
                 blob = mapper.writeValueAsBytes(update);
             } catch (JsonProcessingException e) {
