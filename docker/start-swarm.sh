@@ -9,8 +9,8 @@ function startMachine {
 CERT=/hosthome/jredondo/Projects/data_monitor/docker/certs/domain.crt
 
 startMachine manager1 
-#startMachine worker0
-#startMachine worker1
+startMachine worker0
+startMachine worker1
 
 
 

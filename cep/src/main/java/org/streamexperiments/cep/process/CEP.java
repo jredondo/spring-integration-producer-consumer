@@ -44,7 +44,7 @@ public class CEP {
     private static final String CONFIG = "application.yaml";
 
     public static void main(String[] args) throws Exception {
-        final Configuration config = loadConfiguration();
+        final Configuration.Kafka config = loadConfiguration().getKafka();
         final String KAFKA_TOPIC_PRODUCER = config.getProducerTopic();
         final String KAFKA_TOPIC_CONSUMER = config.getConsumerTopic();
         final Properties properties = loadProperties(config);
@@ -88,7 +88,7 @@ public class CEP {
         return kafkaProducer;
     }
 
-    private static Properties loadProperties(Configuration config) {
+    private static Properties loadProperties(Configuration.Kafka config) {
         Properties properties = new Properties();
         properties.setProperty("bootstrap.servers", config.getBootstrapServers());
         properties.setProperty("zookeeper.connect", config.getZookeeperConnect());
