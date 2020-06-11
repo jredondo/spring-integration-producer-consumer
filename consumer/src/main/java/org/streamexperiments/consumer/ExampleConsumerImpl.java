@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Example consumer implementation showing decoupling of integration and logic by means of Spring Integration framework
+ * Example consumer implementation showing decoupling of integration and logic by means of Spring Integration framework.
  * TCP integration is all abstracted behind the tcpServiceChannel, for which a @ServiceActivator must be provided.
  * Seemingly, Kafka integration is all abstracted behind the kafkaServiceChannel.
  * A @ServiceActivator for it must be provided.

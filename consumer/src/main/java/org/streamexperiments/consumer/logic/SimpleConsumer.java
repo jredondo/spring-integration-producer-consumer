@@ -20,7 +20,7 @@ public class SimpleConsumer implements Consumer {
 
     public void consume(Update update) {
         // Insert here whatever processing to Update instances you may need:
-        // (As for now, only print)
+        // (As for now, only print the count)
         if(count % Consumer.PRINT_COUNT == 0) {
             logger.info(count + " items processed");
         }
