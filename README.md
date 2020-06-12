@@ -4,6 +4,8 @@ This is still an incipient implementation of the Producer/Consumer pattern using
 Its _main_ purpose is to show the decoupling of producer's and consumer's logic from the integration mechanisms provided out of the box by Spring Integration.
 Two integration mechanism are provided so far: TCP and Kafka.
 
+For a possibly interesting use case, have a look at the [boilerplate for a Complex Event Processing pipeline using Flink and Spring Integration](https://github.com/jredondo/flink-cep-spring-integration)
+
 #### Docker Swarm:
 
 Some rudimentary scripts and Dockerfiles for deploying with Docker Swarm and Docker Machine are provided in the following directories: 
