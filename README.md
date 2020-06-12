@@ -1,31 +1,40 @@
-# Simple Producer/Consumer implementation using Spring Integration.
+# Simple Producer/CEP/Consumer implementation using Spring Integration.
 
-This is a still an incipient implementation of the Producer/Consumer pattern using [Spring Integration](https://docs.spring.io/spring-integration/reference/html/overview.html). 
-Its _main_ purpose is to show the decoupling of producer's and consumer's logic from the integration mechanisms provided out of the box by Spring Integration.
-Two integration mechanism are provided so far: TCP and Kafka.
+This is a step forward on the [Simple Producer/Consumer implementation using Spring Integration](https://github.com/jredondo/spring-integration-producer-consumer).
+
+Basically, a [Complex Event Processor](https://en.wikipedia.org/wiki/Complex_event_processing) process (or simple CEP) has been inserted between the originals producer and consumer processes.  
+Producer and consumer code remain untouched, so it keeps being a clean implementation using [Spring Integration](https://docs.spring.io/spring-integration/reference/html/overview.html). 
+For the scope of this repository's experiments, only Kafka integration is used. 
+The main purpose is to offer and simple implementation suitable as the starting point for testing the "statefulness" of stream processing using Flink and Kafka.  
+
+The Flink CEP implementation is under cep/ directory.  
 
 #### Docker Swarm:
 
-Some rudimentary scripts and Dockerfiles for deploying with Docker Swarm are provided in the following directories: 
+As with the [Simple Producer/Consumer implementation using Spring Integration](https://github.com/jredondo/spring-integration-producer-consumer) some rudimentary scripts and Dockerfiles for deploying with Docker Swarm are provided in the following directories: 
 
 ```
-$ ls -l docker/
-total 32
-... deploy-app-stack.sh   
+$ ls -l docker 
+total 48
+... deploy-app-stack.sh
+... deploy-cep-stack.sh
+... deploy-flink-stack.sh
 ... deploy-kafka-stack.sh
 ... docker-app-stack.yml
+... docker-cep-stack.yml
+... docker-flink-stack.yml
 ... docker-kafka-stack.yml
 ... start-kafka-consumer.sh
 ... start-kafka-producer.sh
 ... start-swarm.sh
 ... stop-swarm.sh
-$
-$ ls -l producer/docker
+$ ls -l producer/docker/
+total 12
 ... Dockerfile
 ... launch-app.sh
 ... setup_image.sh
-$
-$ ls -l consumer/docker
+$ ls -l consumer/docker/
+total 12
 ... Dockerfile
 ... launch-app.sh
 ... setup_image.sh
