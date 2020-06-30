@@ -1,8 +1,6 @@
 # Set the REGISTRY_IP environment variable to override the registry IP
-# Set the REGISTRY_IP environment variable to override the swarm's manager IP
 
 version: "3.7"
-
 
 services:
   producer:
@@ -10,12 +8,6 @@ services:
     depends_on:
       - kafka1
 
-#  consumer:
-#    image: ${REGISTRY_IP}/consumer:latest
-#    depends_on:
-#      - producer
-
-###################################################
 # Kafka:
   zookeeper:
     image: ${REGISTRY_IP}/zookeeper:latest
@@ -26,15 +18,8 @@ services:
       - 2181:2181
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
-##    deploy:
-##      mode: global
-##      placement:
-##        constraints:
-##          - node.labels.zoo==1
-##    command: /kafka/bin/zookeeper-server-start.sh /kafka/config/zookeeper.properties
-#
   kafka:
-    image: 192.168.99.147/kafka:latest
+    image: ${REGISTRY_IP}/kafka:latest
     volumes:
        - kafka-logs:/tmp/kafka-logs
        - /var/run/docker.sock:/var/run/docker.sock

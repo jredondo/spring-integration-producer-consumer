@@ -1,2 +1,2 @@
-sh producer/docker/setup_image.sh
-sh consumer/docker/setup_image.sh
+sh docker/setup_image.sh producer
+sh docker/setup_image.sh consumer
