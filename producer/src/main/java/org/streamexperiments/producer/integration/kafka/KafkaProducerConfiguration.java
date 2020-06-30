@@ -1,5 +1,6 @@
 package org.streamexperiments.producer.integration.kafka;
 
+import org.springframework.kafka.config.TopicBuilder;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.streamexperiments.config.kafka.KafkaAppProperties;
@@ -24,6 +25,8 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessageHandlingException;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.beans.factory.annotation.Value;
+
 
 import java.util.Map;
 
@@ -39,6 +42,9 @@ import java.util.Map;
 @Configuration
 @ConditionalOnProperty(value="kafka.enabled", havingValue = "true")
 public class KafkaProducerConfiguration {
+
+    @Value("${kafka.replicas}")
+    private short replicas;
 
     /**
      * Extension of {@link org.springframework.integration.annotation.Gateway}r related to Kafka
@@ -122,6 +128,22 @@ public class KafkaProducerConfiguration {
      */
     @Bean
     public NewTopic topic(KafkaAppProperties properties) {
-        return new NewTopic(properties.getTopic(), 1, (short) 1);
+        try { 
+            Thread.sleep(20000);
+        } catch(InterruptedException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
+
+        System.out.println("**********************************");
+        System.out.println("******** CREATING TOPIC: *********");
+        System.out.println("******** REPLICAS: " + replicas + " *********");
+        System.out.println("**********************************");
+        return TopicBuilder.name(properties.getTopic())
+            .partitions(1)
+            .replicas(replicas)
+            .compact()
+            .build();
+        //return new NewTopic(properties.getTopic(), 1, (short) 3);
     }
 }

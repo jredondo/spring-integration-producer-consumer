@@ -12,6 +12,7 @@ data-monitor:
   sender: "init"
   throughput: 1000
   N: 1
+  producer-uuid: "producer-default-name"
 
 tcp:
   enabled: "false"
@@ -21,9 +22,10 @@ kafka:
   enabled: "true"
   topic: "producer.topic"
   group-id: "siTestGroup"
-#  messageKey: "si.key"
+  messageKey: "si.key"
   buffer-memory: 33554432
   retries: 0
+  replicas: 2
 #  key-serializer: org.apache.kafka.common.serialization.StringSerializer
 #  value-serializer: org.apache.kafka.common.serialization.StringSerializer
 

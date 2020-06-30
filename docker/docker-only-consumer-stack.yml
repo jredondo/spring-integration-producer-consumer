@@ -1,0 +1,11 @@
+# Set the REGISTRY_IP environment variable to override the registry IP
+# Set the REGISTRY_IP environment variable to override the swarm's manager IP
+
+version: "3.7"
+
+
+services:
+
+  consumer:
+    image: ${REGISTRY_IP}/consumer:latest
+
