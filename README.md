@@ -1,10 +1,9 @@
-
-#Simplified Fault-Tolerant Streaming Data Pipeline
+# Simplified Fault-Tolerant Streaming Data Pipeline
 *(Using Spring Boot, Spring Integration, Kafka and Docker Swarm)*
 
-##Introduction:
+## Introduction:
 
-###Streaming Data Pipeline:
+### Streaming Data Pipeline:
 
 Let's first define what we understand here as a "streaming data
 pipeline". For the sake of simplicity, we are going to define it simply
@@ -12,14 +11,14 @@ in terms of the *producer/consumer pattern*. So we are going to have
 *two processes* sharing data by means of a *channel* which
 *asynchronously* communicates them in one single direction:
 
-![alt text](producer-channel-messages-consumer.png)
+![alt text](docs/producer-channel-messages-consumer.png)
 
 Despite the fact that this simple model proposes an uni-directional
 channel, note that it renders the most basic form of processes
 integration by means of asynchronous messaging, which is the
 foundational stone for every micro-service architecture.
 
-###Fault Tolerance:
+### Fault Tolerance:
 
 Now let's define what we will be considering as *a failure*:
 Let's say a failure will be any event that will, in some way or
@@ -38,7 +37,7 @@ other componets goes down.
 Many combinations may come up, but in this article we are going to 
 focus on a subset of the third kind: a temporary failure in the integration channel.
 
-###Resilience:
+### Resilience:
 
 In order to overcome a temporary failure in the integration channel used
 between our producer and consumer, we need to avoid the presence of any
@@ -51,7 +50,7 @@ to keep working in the presence of failures.\
 In our case, we are going to use a clustered system for streaming data
 channels, this is: Kafka, a "distributed streaming platform".
 
-##Implementation:
+## Implementation:
 
 For the implementation of the two processes we are going to use *Spring
 Boot* that will help us on easily getting important pieces of our
@@ -59,9 +58,9 @@ runtime environment together, and *Spring Integration* that will help us
 to nicely decouple the *logic* of our producer and consumer from the
 *integration* means that we will be using.
 
-###The producer:
+### The producer:
 
-####Logic:
+#### Logic:
 
 The core of the logic of our producer is basically an infinite loop that
 will be producing mock updates at a configurable throughput. Each update
@@ -87,7 +86,7 @@ The TestProducer object holds as an attribute a set of the so called
 other words, senders are the fundamental entities abstracting the
 integration stuff for the producers.
 
-####Integration:
+#### Integration:
 
 In our case, the "Sender" object is "*that thin layer of code that
 attaches the application to*
@@ -114,7 +113,7 @@ More or less, this is what you will find in the TCPProducer:
     }
 ```
 
-![alt text](producer.png)
+![alt text](docs/producer.png)
 
 And, more or less, this is what you will find on the KafkaProducer:
 
@@ -132,9 +131,9 @@ And, more or less, this is what you will find on the KafkaProducer:
     }
 ```
 
-###The consumer:
+### The consumer:
 
-####Logic:
+#### Logic:
 
 As our experiment is focused on detecting data loss in our system
 happening as consequence of a temporary failure in the integration
@@ -176,7 +175,7 @@ For a glance on how this works, have a look at these tests:
     }
 ```
 
-####Integration:
+#### Integration:
 
 As with the producer logic, the consumer logic does not have any
 concerns regarding what kind of integration channel the updates it
@@ -214,9 +213,9 @@ public class ExampleConsumerImpl {
 }
 ```
 
-![alt text](consumer.png)
+![alt text](docs/consumer.png)
 
-###The integration channel:
+### The integration channel:
 
 As said before, we are going to use Kafka as our integration channel and
 the feature from it that we are going to focus on is its ability to keep
@@ -255,16 +254,16 @@ available.
 (Note that each broker does not necessarily run on a different host, although advisable. 
 Production deployments usually use a broker per container.)
 
-![alt text](kafka.png)
+![alt text](docs/kafka.png)
 
-###Deployment:
+### Deployment:
 
 Our code provides Dockerfiles for producer and consumer and also the
 docker-compose YAML files for deploying the whole systems using Docker
 Swarm. On a development environment these tools can be deployed using
 Docker Machine, and that is what we are going show as follows.
 
-##The swarm:
+## The swarm:
 
 The first step is to create the docker machines and join all them into a
 swarm. After that, we need to deploy a private registry as a service in
@@ -316,7 +315,7 @@ sh docker/deploy-producer-consumer-kafka-stack.sh
 
 If everything goes fine, we will have a deployment as depicted in the following picture:
 
-![alt text](producer-consumer-drawio.png)
+![alt text](docs/producer-consumer-drawio.png)
 
 Many underlying details are implied in this picture and all of them well documented out there. So let's just 
 add on a few things regarding our further intentions with these experiments:  
@@ -325,7 +324,7 @@ deployed contaniers so, up to a certain point, we really don't care about what m
 Our focus is, particularly, on the way that producer, consumer and kafka containers talk to each other and, in general, 
 on how clients talk to Kafka brokers. The next picture depicts these communication paths:
 
-![alt text](producer-consumer-connecting.png)
+![alt text](docs/producer-consumer-connecting.png)
 
 Here we see again our four machines deploying the six containers of our system. 
 Also, we have two networks depicted and the ports mapping used for deploying ports to the ingress swarm's nerwork. 
