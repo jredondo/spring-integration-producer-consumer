@@ -20,12 +20,13 @@ import java.util.Set;
 public class MultiplexerConsumer implements Consumer {
 
     private static Logger logger = LogManager.getLogger(MultiplexerConsumer.class);
+    private final long THRESHOLD = 5;
 
     private Map<String, Set<Update>> map = new HashMap<>();
 
     public void consume(Update update) {
         Set<Update> set = map.computeIfAbsent(update.getSender(), (key) -> new HashSet<Update>());
-        if(set.size() % Consumer.PRINT_COUNT == 0) {
+        if(set.size() % THRESHOLD == 0) {
             logger.info(set.size() + " items for sender: " + update.getSender());
         }
         set.add(update);

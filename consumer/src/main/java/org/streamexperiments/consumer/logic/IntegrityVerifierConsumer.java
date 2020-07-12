@@ -75,6 +75,7 @@ public class IntegrityVerifierConsumer implements Consumer {
                     continue;
                 } else {
                     if (item - aux != 1) {
+                        logger.info("IDS: " + copy.toString());
                         return true;
                     }
                     aux = item;

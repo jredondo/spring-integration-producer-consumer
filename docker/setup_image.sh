@@ -2,7 +2,7 @@
 
 REGISTRY_IP=192.168.99.147
 TAG=$REGISTRY_IP/$1:latest
-DOCKERFILE=producer/docker/Dockerfile
+DOCKERFILE=$1/docker/Dockerfile
 
 gradle $1:build
 
