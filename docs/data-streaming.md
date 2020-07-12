@@ -1,3 +1,4 @@
+
 #Simplified Fault-Tolerant Streaming Data Pipeline
 *(Using Spring Boot, Spring Integration, Kafka and Docker Swarm)*
 
@@ -22,23 +23,26 @@ foundational stone for every micro-service architecture.
 
 Now let's define what we will be considering as *a failure*:
 Let's say a failure will be any event that will, in some way or
-another, derive in *data loss.* In general, in this context there may be
-three types of failure:
+another, derive in *data loss.* In general, in this system there may be
+three kind of failure, depending on what components are affected:
 
-1. *Producer* goes down temporarily or definitely.
+1. Failure in the *Producer*.
 
-2. *Consumer* goes down temporarily or definitely.
+2. Failure in the *Consumer*.
 
-3. *Integration Channel* goes down temporarily or definitely.
+3. Failure in the *Integration Channel*.
 
-In this article we are going to focus on a subset of the third type: a
-temporary failure in the integration channel.
+The proposed way to avoid any of these implies that those *components must have 
+no single point of failure internally* and *are aware on how to recover* whenever any of the 
+other componets goes down. 
+Many combinations may come up, but in this article we are going to 
+focus on a subset of the third kind: a temporary failure in the integration channel.
 
 ###Resilience:
 
 In order to overcome a temporary failure in the integration channel used
 between our producer and consumer, we need to avoid the presence of any
-single point of failure. Usually, clustered systems are the mainstream
+single point of failure within the channel itself. Usually, clustered systems are the mainstream
 regarding resilient software technologies, as they provide the means to
 deploy software layers composed by several nodes acting as one single
 entity, the "cluster". As failures are thought to happen only to one or
@@ -61,8 +65,10 @@ to nicely decouple the *logic* of our producer and consumer from the
 
 The core of the logic of our producer is basically an infinite loop that
 will be producing mock updates at a configurable throughput. Each update
-is identified by a sequence number increasing by 1 with each update
-produced. It is implemented in the TestProducer object as follows:
+is identified by a sequence number increasing by 1 with each produced update. 
+The loop is implemented in the TestProducer object as follows:
+
+
 
 ```java
  while (true) {
@@ -296,15 +302,47 @@ sh docker/setup_image.sh consumer ← For the consumer
 ```
 
 You will also need to pull an appropriated Kafka image (we suggest
-wurstmeister/kafka), tag it and push it to our registry in order to make
-it available for all the swarm nodes.
+wurstmeister/kafka) and maybe for testing purposes, tag it and push it to our registry in order to make
+it locally available for all the swarm nodes.
 
-Once we have all the images in place, this is, in our private registry 
-we must deploy the whole stack. Our repository provides simple scripts for doing this. 
-By setting appropriately the REGISTRY_IP environment variable, you should only need to
+Once we have all the images in place we must deploy the whole stack. 
+Our repository also provides simple scripts for doing this. 
+By setting appropriately the REGISTRY_IP environment variable on your host machine, you should only need to
 issue this command to have all the system deployed:
 
 ```shell script
 sh docker/deploy-producer-consumer-kafka-stack.sh
 ```
+
+If everything goes fine, we will have a deployment as depicted in the following picture:
+
+![alt text](producer-consumer-drawio.png)
+
+Many underlying details are implied in this picture and all of them well documented out there. So let's just 
+add on a few things regarding our further intentions with these experiments:  
+We have here four docker machines joined in a Docker Swarm. The swarm provides a common ground for all of our 
+deployed contaniers so, up to a certain point, we really don't care about what machine hosts what container.  
+Our focus is, particularly, on the way that producer, consumer and kafka containers talk to each other and, in general, 
+on how clients talk to Kafka brokers. The next picture depicts these communication paths:
+
+![alt text](producer-consumer-connecting.png)
+
+Here we see again our four machines deploying the six containers of our system. 
+Also, we have two networks depicted and the ports mapping used for deploying ports to the ingress swarm's nerwork. 
+Clients *external* to our swarm stack must go through the *virtualbox's host-only interface* which in turn connects to 
+the swarm ingress network. 
+Clients deployed within the producer-consumer stack go through the network that connects them all together and for   
+which a DNS service is automatically deployed by the docker swarm.
+The picture shows both cases, an external client (e.g. the kafkacat client) and    
+internal clients (e.g. producer and consumer) connecting to the two deployed Kafka brokers. As said, the external client will get 
+in touch with Kafka brokers by means of the ingress swarm's network which in turn reaches each broker on their  
+external listeners. By their side, internal clients 
+will get in touch with the two deployed Kafka brokers by means of the producer-consumer stack's network ann finally 
+the internal listeners. For a detailed explanation on Kafka listeners have a look a [this post](https://www.confluent.io/blog/kafka-listeners-explained/)
+
+## Fault-Tolerance: revisited.
+
+The key aspect of our deployment is that we have two kafka broker: in case that one of them fails, the other 
+one remains *available*. Our integrity verifier consumer should not notice the failure. 
+
 
