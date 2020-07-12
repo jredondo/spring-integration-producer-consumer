@@ -1,0 +1,10 @@
+# Set the REGISTRY_IP environment variable to override the registry IP
+  
+version: "3.7"
+
+services:
+  producer:
+    image: ${REGISTRY_IP}/producer:latest
+    depends_on:
+      - kafka1
+
