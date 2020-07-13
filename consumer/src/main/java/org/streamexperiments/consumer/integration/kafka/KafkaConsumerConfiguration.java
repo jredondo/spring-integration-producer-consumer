@@ -16,6 +16,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
+import org.springframework.kafka.listener.LoggingErrorHandler;
 import org.springframework.kafka.support.TopicPartitionOffset;
 
 import java.util.Map;
@@ -108,10 +109,11 @@ public class KafkaConsumerConfiguration {
     @Bean
     public DirectChannel fromKafka() {
         return new DirectChannel();
-        //SubscribableKafkaChannel channel = new SubscribableKafkaChannel(template, factory, properties.getTopic());
-        //channel.setGroupId(properties.getGroupId());
-        //return channel;
     }
 
+    @Bean
+    public LoggingErrorHandler errorHandler() {
+        return new LoggingErrorHandler();
+    }
 
 }

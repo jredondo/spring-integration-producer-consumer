@@ -26,6 +26,7 @@ import org.springframework.messaging.MessageHandlingException;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 
 
 import java.util.Map;
@@ -52,6 +53,7 @@ public class KafkaProducerConfiguration {
      *
      */
     @MessagingGateway(defaultRequestChannel = "toJson")
+    @Async
     public interface Gateway extends org.streamexperiments.producer.integration.Gateway {
         void send(Update payload, @Header(KafkaHeaders.TOPIC) String topic) throws MessageHandlingException;
     }
